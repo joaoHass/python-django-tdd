@@ -9,6 +9,6 @@ def test_home_page_returns_correct_html():
     html = response.content.decode('utf8')
     
     assert '<title>To-Do Lists</title>' in html
-    assert html.startsWith('<html>')
-    assert html.endsWith('<html>')
+    assert html.startswith('<html>')
+    assert html.endswith('<html>')
     
