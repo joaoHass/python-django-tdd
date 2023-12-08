@@ -1,19 +1,19 @@
-import unittest
+import pytest
 from selenium import webdriver
 
-class NewVisitorTest(unittest.TestCase):
-    def setUp(self):
-        self.browser = webdriver.Firefox()
-        
-    def tearDown(self):
-        self.browser.quit()
-        
-    def test_can_start_a_todo_list(self):
-        self.browser.get('http://localhost:8000')
-        
-        self.assertIn('To-Do', self.browser.title)
-        
-        self.fail('Finish the test!')
+@pytest.fixture
+def setup_data():
+    print('Test started')
+    browser = webdriver.Firefox()
+    
+    yield browser
+    
+    browser.quit()
+    print('Test ended')
 
-if __name__ == "__main__":
-    unittest.main()
+def test_can_start_a_todo_list(setup_data):
+    browser = setup_data
+    
+    browser.get('http://localhost:8000')
+    
+    assert 'To-Do' in browser.title
