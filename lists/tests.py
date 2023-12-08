@@ -10,5 +10,5 @@ def test_home_page_returns_correct_html():
     
     assert '<title>To-Do Lists</title>' in html
     assert html.startswith('<html>')
-    assert html.endswith('<html>')
+    assert html.endswith('</html>')
     
