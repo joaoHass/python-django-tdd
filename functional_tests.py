@@ -41,7 +41,9 @@ def test_can_start_a_todo_list(setup_data):
     
     table = browser.find_element(By.ID, 'idListTable')
     rows = table.find_elements(By.TAG_NAME, 'tr')
-    assert any(row.text == '1: Buy peacock feathers' for row in rows)
+    assert '1: Buy peacock feathers' in [row.text for row in rows]
+    assert '2: Use peacock feathers to make a fly' in [row.text for row in rows]
+    
     
     # There is still a text box inviting her to add another item.
     # She enters "Use peacock feathers to make a fly"

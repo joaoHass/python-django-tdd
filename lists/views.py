@@ -6,4 +6,9 @@ from django.shortcuts import render
 
 # Create your views here.
 def home_page(request: Type[HttpRequest]):
-    return render(request, 'home.html')
+
+    return render(
+        request, 
+        'home.html',
+        {'new_item': request.POST.get('new-item-input', '')}
+    )

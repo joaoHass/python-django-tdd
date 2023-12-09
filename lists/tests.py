@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.http import HttpRequest
 from lists.views import home_page
-from pytest_django.asserts import assertTemplateUsed
+from pytest_django.asserts import assertTemplateUsed, assertContains
 
 
 # utilizes the django.test.Client fixture from pytest-django
@@ -15,3 +15,10 @@ def test_home_page_returns_correct_html(client):
     assert response_html.endswith('</html>')
     assertTemplateUsed(response, 'home.html')
     
+    
+def test_can_save_a_POST_request(client):
+    response = client.post('/', data={'new-item-input': 'A new list item'})
+
+    assertContains(response, 'A new list item')
+    assertTemplateUsed(response, 'home.html')
+
