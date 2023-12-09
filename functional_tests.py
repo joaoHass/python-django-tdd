@@ -27,8 +27,8 @@ def test_can_start_a_todo_list(setup_data):
     assert 'To-Do' in h1_text
     
     # She is invited to enter a to-do item straight away
-    inputbox = browser.find_element(BY.ID, 'idNewItem')
-    assert inputbox.get_attribute('placeholder', 'Enter a To-Do item')
+    inputbox = browser.find_element(By.ID, 'idNewItem')
+    assert inputbox.get_attribute('placeholder') == 'Enter a To-Do item'
     
     # She types "Buy peacock feathers" into a text box
     # (Edith's hobby is tying fly-fishing lures)
@@ -39,7 +39,7 @@ def test_can_start_a_todo_list(setup_data):
     inputbox.send_keys(Keys.ENTER)
     time.sleep(1)
     
-    table = browser.find.element(By.ID, 'idListTable')
+    table = browser.find_element(By.ID, 'idListTable')
     rows = table.find_elements(By.TAG_NAME, 'tr')
     assert any(row.text == '1: Buy peacock feathers' for row in rows)
     
