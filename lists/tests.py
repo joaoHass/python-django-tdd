@@ -16,6 +16,14 @@ def test_home_page_returns_correct_html(client, db):
     assert response_html.endswith('</html>')
     assertTemplateUsed(response, 'home.html')
     
+def test_displays_all_items(client, db):
+    Item.objects.create(text = 'itemey 1')
+    Item.objects.create(text = 'itemey 2')
+    response_html = client.get('/').content.decode('utf8')
+    
+    assert 'itemey 1' in response_html
+    assert 'itemey 2' in response_html
+
     
 def test_can_save_a_POST_request(client, db):
     response = client.post('/', data={'new-item-input': 'A new list item'})

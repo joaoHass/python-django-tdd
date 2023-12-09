@@ -42,7 +42,6 @@ def test_can_start_a_todo_list(setup_data):
     table = browser.find_element(By.ID, 'idListTable')
     rows = table.find_elements(By.TAG_NAME, 'tr')
     check_for_row_in_table_list(browser, '1: Buy peacock feathers')
-    check_for_row_in_table_list(browser, '2: Use peacock feathers to make a fly')
     
     # There is still a text box inviting her to add another item.
     # She enters "Use peacock feathers to make a fly"

@@ -12,8 +12,5 @@ def home_page(request: Type[HttpRequest]):
         Item.objects.create(text=request.POST['new-item-input'])
         return redirect('/')
     
-    return render(
-        request, 
-        'home.html',
-        {'new_item': request.POST.get("new-item-input", "")}
+    return render(request, 'home.html', {'items': Item.objects.all()}
     )
