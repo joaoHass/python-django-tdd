@@ -2,12 +2,12 @@ from django.test import TestCase
 from django.http import HttpRequest
 from lists.views import home_page
 from lists.models import Item
-from pytest_django.asserts import assertTemplateUsed, assertContains
+from pytest_django.asserts import assertTemplateUsed, assertRedirects
 
 
 # utilizes the django.test.Client fixture from pytest-django
 # see: https://pytest-django.readthedocs.io/en/latest/helpers.html#client-django-test-client
-def test_home_page_returns_correct_html(client):
+def test_home_page_returns_correct_html(client, db):
     response = client.get('/')
     response_html = response.content.decode('utf8').strip()
     
@@ -17,12 +17,18 @@ def test_home_page_returns_correct_html(client):
     assertTemplateUsed(response, 'home.html')
     
     
-def test_can_save_a_POST_request(client):
+def test_can_save_a_POST_request(client, db):
+    response = client.post('/', data={'new-item-input': 'A new list item'})
+    items = Item.objects
+
+    assert items.count() == 1
+    assert items.first().text == 'A new list item'
+    
+def test_redirects_after_POST(client, db):
     response = client.post('/', data={'new-item-input': 'A new list item'})
 
-    assertContains(response, 'A new list item')
-    assertTemplateUsed(response, 'home.html')
-
+    assertRedirects(response, '/')
+    
 
 def test_saving_and_retrieving_items(db):
     first_item = Item()
@@ -41,3 +47,9 @@ def test_saving_and_retrieving_items(db):
     
     assert first_saved_item.text == 'The first list item'
     assert second_saved_item.text == 'Item, the second'
+    
+def test_only_save_items_when_necessary(client, db):
+    client.get('/')
+    
+    assert Item.objects.count() == 0
+    
