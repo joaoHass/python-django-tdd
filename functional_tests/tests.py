@@ -14,12 +14,12 @@ def setup_data():
     browser.quit()
     print('Test ended')
 
-def test_can_start_a_todo_list(setup_data):
+def test_can_start_a_todo_list(setup_data, live_server):
     browser = setup_data
     
     # Edith has heard about a cool new online to-do app.
     # She goes to check out its homepage
-    browser.get('http://localhost:8000')
+    browser.get(str(live_server.url))
     
     # She notices the page title and header mention to-do lists
     assert 'To-Do' in browser.title
