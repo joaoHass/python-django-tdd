@@ -1,6 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import WebDriverException
 import pytest
 import time
 
@@ -37,21 +38,32 @@ def test_can_start_a_todo_list(setup_data, live_server):
     # When she hits enter, the page updates, and now the page lists
     # "1: Buy peacock feathers" as an item in a to-do list table\
     inputbox.send_keys(Keys.ENTER)
-    time.sleep(1)
     
-    table = browser.find_element(By.ID, 'idListTable')
-    rows = table.find_elements(By.TAG_NAME, 'tr')
-    check_for_row_in_table_list(browser, '1: Buy peacock feathers')
+    wait_for_row_in_table_list(browser, '1: Buy peacock feathers')
     
     # There is still a text box inviting her to add another item.
     # She enters "Use peacock feathers to make a fly"
     # (Edith is very methodical)
-    pytest.fail('Finish the test')
+    inputbox = browser.find_element(By.ID, "idNewItem")
+    inputbox.send_keys("Use peacock feathers to make a fly")
+    inputbox.send_keys(Keys.ENTER)
     
     # The page updates again, and now shows both items on her list
-
-def check_for_row_in_table_list(browser, row_text):
-    table = browser.find_element(By.ID, 'idListTable')
-    rows = table.find_elements(By.TAG_NAME, 'tr')
+    wait_for_row_in_table_list("1: Buy peacock feathers")
+    wait_for_row_in_table_list("2: Use peacock feathers to make a fly")
     
-    assert row_text in [row.text for row in rows]
+def wait_for_row_in_table_list(browser, row_text):
+    MAX_WAIT = 5
+    start_time = time.time()
+    
+    while True:
+        try:
+            table = browser.find_element(By.ID, 'idListTable')
+            rows = table.find_elements(By.TAG_NAME, 'tr')
+
+            assert row_text in [row.text for row in rows]
+            return
+        except (AssertionError, WebDriverException):
+            if time.time() - start_time > MAX_WAIT:
+                raise
+            time.sleep(0.5)
