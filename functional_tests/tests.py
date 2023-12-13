@@ -64,8 +64,8 @@ def test_multiple_users_can_start_lists_at_different_urls(setup_data, live_serve
 
     # She notices that her list has a unique URL
     edith_list_url = browser.current_url
-    print(re.match('/lists/.+', edith_list_url))
-    assert re.match('/lists/.+', edith_list_url) is not None, "Regex didn't match"
+    print(re.search('/lists/.+', edith_list_url))
+    assert re.search('/lists/.+', edith_list_url) is not None, "Regex didn't match"
 
     # Now a new user, Francis, comes along to the site.
 
@@ -89,7 +89,7 @@ def test_multiple_users_can_start_lists_at_different_urls(setup_data, live_serve
 
     # Francis gets his own unique URL
     francis_list_url = browser.current_url
-    assert re.match('/lists/.+', francis_list_url) is not None, f'regex not found in {francis_list_url}'
+    assert re.search('/lists/.+', francis_list_url) is not None, f'regex not found in {francis_list_url}'
     assert francis_list_url != edith_list_url
 
     # Again, there is no trace of Edith's list
